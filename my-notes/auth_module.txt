@@ -1,0 +1,42 @@
+Auth Module
+
+User types:
+ - Students
+ - Admins
+ - Instructor
+
+
+
+Key feature to implement:
+-------------------------
+ 1. REgistration system
+    - Different forms for students/ instructor
+    - Email verification
+    - Admin approval for instructor (optional) // so we can make the user wait for approve
+ 2. Login/ Logout
+    - sanctum tokens
+    - Remember
+ 3. Security
+    - Rate Limiter
+    - password policies
+    - CSRF protection
+    - verifications
+ 4. Notifications
+    - email verification
+    - admin notifications for new registration
+    - password reset
+
+
+
+Additional Considerations:
+ - Social Login                 => Google and facebook
+ - Two-Factor Authentication    => For instructors/Admins
+ - Password Reset Flow          => standard laravel implementation
+ - Account Deactivation         => for Admin management
+
+
+
+Admin features with
+ - Approve/reject instructor
+ - Ban Users
+ - View all users 

@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +25,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-
+        'role', // 'student' or 'instructor
+        'is_approved', // true for students, false for instructors
     ];
 
     /**
@@ -57,6 +59,18 @@ class User extends Authenticatable
 
     public function courses() : HasMany {
         return $this->hasMany(Course::class, 'instructor_id');
+    }
+
+
+
+
+
+
+
+
+    // Scopes:
+    public function scopeAdmin($query) {
+        return $query->where('role', 'admin');
     }
 
 

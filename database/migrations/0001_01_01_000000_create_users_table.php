@@ -16,6 +16,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('language', 10)->default('en');
+            $table->string('country', 50)->nullable();
+            $table->string('timezone', 50)->default('UTC');
+            $table->string('locale', 10)->default('en');
+            $table->string('currency', 10)->default('USD');
+            $table->enum('role', ['admin', 'instructor', 'student'])->default('student');
+            $table->boolean('is_approved')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
@@ -36,7 +43,7 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
 
-        Shema::create('profiles', function (Blueprint $table) {
+        Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('avatar')->nullable();
