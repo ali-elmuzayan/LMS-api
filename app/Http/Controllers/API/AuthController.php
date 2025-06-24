@@ -10,13 +10,23 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Notifications\NewInstructorRegistered;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use LDAP\Result;
 
-class AuthController extends Controller
+class AuthController extends Controller implements HasMiddleware
 {
+
+    public static function middleware() {
+        return [
+            new Middleware('auth:sanctum', only: ['logout']),
+        ];
+    }
+
 
     public function register(Request $request) {
         // $data = $request->validated();
@@ -73,4 +83,14 @@ class AuthController extends Controller
     //         'access_token' => $token,
     //     ]);
     // }
+
+
+    public function logout(Request $request) {
+        $user = $request->user();
+        $user->currentAccessToken()->delete();
+
+        Log::info('User logged out', ['user_id' => $request->user()->id]);
+
+        return ApiResponse::sendResponse(200, 'Logged out successfully.', null);
+    }
 }

@@ -13,5 +13,17 @@ Route::get('/', [FrontController::class , 'home'])
     ->name('home');
 
 
-Route::post('/register', [AuthController::class, 'register'])
-    ->name('api.register');
+
+
+Route::controller(AuthController::class)
+    ->group(function () {
+        Route::post('/register', 'register')
+            ->name('api.register');
+
+        Route::post('/login', 'login')
+            ->name('api.login');
+
+        Route::post('/logout', 'logout')
+            ->name('api.logout');
+
+    });
