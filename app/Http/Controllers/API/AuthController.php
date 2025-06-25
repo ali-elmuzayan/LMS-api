@@ -85,6 +85,35 @@ class AuthController extends Controller implements HasMiddleware
     // }
 
 
+    public function Login(LoginRequest $request) {
+
+
+        $credentials = $request->only('email', 'password');
+
+        if (!Auth::attempt($credentials)) {
+            throw ValidationException::withMessages(['email' => ['The provided credentials are incorrect.']]);
+        }
+
+
+
+        $user = Auth::user();
+
+        // if (!$user->is_approved) {
+        //     throw ValidationException::withMessages(['email' => ['Your account is not approved yet.']]);
+        // }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        Log::info('User logged in', ['user_id' => $user->id]);
+
+        return ApiResponse::sendResponse(200, 'Login successful.', [
+            'user' => new UserResource($user),
+            'access_token' => $token,
+        ]);
+
+    }
+
+
     public function logout(Request $request) {
         $user = $request->user();
         $user->currentAccessToken()->delete();

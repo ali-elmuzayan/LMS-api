@@ -11,7 +11,20 @@ class LoginRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
+    }
+
+    public function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        if ($this->is('/api/*')) {
+            // Return a JSON response for API requests
+            throw new \Illuminate\Validation\ValidationException($validator, response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422));
+        }
+        // Handle failed validation
+        throw new \Illuminate\Validation\ValidationException($validator);
     }
 
     /**
@@ -21,8 +34,10 @@ class LoginRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
-            //
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string', 'min:8'],
         ];
     }
 }

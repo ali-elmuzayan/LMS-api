@@ -1,0 +1,10 @@
+admin
+
+handled Users:
+ - special way to login with admin 
+ - show all instructors [approved, not approved, searching]
+ - admin should see
+ - check admin middleware
+ - admin register admin
+ - admin see all the courses and edit it
+

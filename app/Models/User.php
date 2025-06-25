@@ -69,8 +69,18 @@ class User extends Authenticatable
 
 
     // Scopes:
+
     public function scopeAdmin($query) {
         return $query->where('role', 'admin');
+    }
+
+    public function scopeInstructor($query) {
+        return $query->where('role', 'instructor');
+    }
+
+    public function scopeUnprovedInstructors($query) {
+        return $query->where('role', 'instructor')
+                     ->where('is_approved', false);
     }
 
 
